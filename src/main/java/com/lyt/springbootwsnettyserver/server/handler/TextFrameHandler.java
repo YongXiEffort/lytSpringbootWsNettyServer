@@ -2,10 +2,7 @@ package com.lyt.springbootwsnettyserver.server.handler;
 
 import com.lyt.springbootwsnettyserver.constant.MsgActionEnum;
 import com.lyt.springbootwsnettyserver.model.DataContent;
-import com.lyt.springbootwsnettyserver.server.textFrameHandlerPackage.ChatFrameHandler;
-import com.lyt.springbootwsnettyserver.server.textFrameHandlerPackage.ConnectFrameHandler;
-import com.lyt.springbootwsnettyserver.server.textFrameHandlerPackage.FrameHandler;
-import com.lyt.springbootwsnettyserver.server.textFrameHandlerPackage.PullMsgFrameHandler;
+import com.lyt.springbootwsnettyserver.server.textFrameHandlerPackage.*;
 import com.lyt.springbootwsnettyserver.util.SpringUtil;
 import com.lyt.springbootwsnettyserver.util.TextFrameUtil;
 import io.netty.channel.Channel;
@@ -32,6 +29,7 @@ public class TextFrameHandler extends SimpleChannelInboundHandler<TextWebSocketF
         handlerMap.put(MsgActionEnum.CONNECT_TYPE, SpringUtil.getBean(ConnectFrameHandler.class));
         handlerMap.put(MsgActionEnum.CHAT_TYPE, SpringUtil.getBean(ChatFrameHandler.class));
         handlerMap.put(MsgActionEnum.PULL_CHAT_MSG, SpringUtil.getBean(PullMsgFrameHandler.class));
+        handlerMap.put(MsgActionEnum.SIGNED_TYPE, SpringUtil.getBean(SignedFrameHandler.class));
     }
 
     @Override

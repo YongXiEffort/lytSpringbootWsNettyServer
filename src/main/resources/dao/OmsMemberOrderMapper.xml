@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyt.springbootwsnettyserver.dao.UserRelationMapper">
+
+    <update id="updateNotReceptCount" parameterType="java.util.Map">
+        <selectKey resultType="INTEGER" keyProperty="notReceptCount" order="AFTER">
+            select (
+            select a.not_receptMsg_count
+            FROM user_relation a
+            WHERE user_id = #{userId,jdbcType=VARCHAR}
+            and fri_user_id = #{friUserId,jdbcType=VARCHAR}
+            ) notReceptCount from DUAL
+        </selectKey>
+        UPDATE user_relation
+        SET not_receptMsg_count = (not_receptMsg_count + 1),
+        last_chat_id = #{lastChatId,jdbcType=VARCHAR}
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+        and fri_user_id = #{friUserId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>
