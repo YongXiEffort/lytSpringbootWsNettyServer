@@ -8,5 +8,7 @@ public class MsgActionEnum {
     public static final Integer KEEPALIVE_TYPE = 4;
     public static final Integer PULL_FRIEND = 5;
     public static final Integer PULL_CHAT_MSG = 6;
+    public static final Integer ADD_FRIEND = 7;
+    public static final Integer ADD_FRIEND_REPONSE = 8;
 
 }

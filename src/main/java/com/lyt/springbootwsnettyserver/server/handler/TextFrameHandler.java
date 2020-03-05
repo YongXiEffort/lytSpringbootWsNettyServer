@@ -24,12 +24,11 @@ public class TextFrameHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
     private TextFrameHandler() {
         handlerMap = new HashMap<>();
-//        handlerMap.put(MsgActionEnum.CONNECT_TYPE, ConnectFrameHandler.INSTANCE);
-//        handlerMap.put(MsgActionEnum.CHAT_TYPE, ChatFrameHandler.INSTANCE);
         handlerMap.put(MsgActionEnum.CONNECT_TYPE, SpringUtil.getBean(ConnectFrameHandler.class));
         handlerMap.put(MsgActionEnum.CHAT_TYPE, SpringUtil.getBean(ChatFrameHandler.class));
         handlerMap.put(MsgActionEnum.PULL_CHAT_MSG, SpringUtil.getBean(PullMsgFrameHandler.class));
         handlerMap.put(MsgActionEnum.SIGNED_TYPE, SpringUtil.getBean(SignedFrameHandler.class));
+        handlerMap.put(MsgActionEnum.ADD_FRIEND, SpringUtil.getBean(AddFriendFrameHandler.class));
     }
 
     @Override
