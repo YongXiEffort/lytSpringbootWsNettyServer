@@ -31,9 +31,7 @@ public class WsclientApplicationTests {
         updateMap.put("lastChatId", "123456789");
         updateMap.put("userId", "AAA");
         updateMap.put("friUserId", "BBB");
-        Integer notReceptMsgCount = userRelationMapper.updateNotReceptCount(updateMap);
-        System.out.println("notReceptMsgCount : " + notReceptMsgCount);
-        Assert.assertEquals(notReceptMsgCount, Integer.valueOf(1));
+        userRelationMapper.updateNotReceptCount(updateMap);
     }
 
 }

@@ -3,14 +3,14 @@
 <mapper namespace="com.lyt.springbootwsnettyserver.dao.UserRelationMapper">
 
     <update id="updateNotReceptCount" parameterType="java.util.Map">
-        <selectKey resultType="INTEGER" keyProperty="notReceptCount" order="AFTER">
-            select (
-            select a.not_receptMsg_count
-            FROM user_relation a
-            WHERE user_id = #{userId,jdbcType=VARCHAR}
-            and fri_user_id = #{friUserId,jdbcType=VARCHAR}
-            ) notReceptCount from DUAL
-        </selectKey>
+        <!--<selectKey resultType="java.lang.Integer" order="AFTER">-->
+            <!--select (-->
+            <!--select a.not_receptMsg_count-->
+            <!--FROM user_relation a-->
+            <!--WHERE a.user_id = #{userId,jdbcType=VARCHAR}-->
+            <!--and a.fri_user_id = #{friUserId,jdbcType=VARCHAR}-->
+            <!--) as notReceptCount from DUAL-->
+        <!--</selectKey>-->
         UPDATE user_relation
         SET not_receptMsg_count = (not_receptMsg_count + 1),
         last_chat_id = #{lastChatId,jdbcType=VARCHAR}

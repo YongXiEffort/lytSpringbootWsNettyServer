@@ -1,10 +1,13 @@
 package com.lyt.springbootwsnettyserver.server.textFrameHandlerPackage;
 
 import com.lyt.springbootwsnettyserver.constant.MsgActionEnum;
+import com.lyt.springbootwsnettyserver.dao.UserMapper;
+import com.lyt.springbootwsnettyserver.domain.User;
 import com.lyt.springbootwsnettyserver.model.DataContent;
 import com.lyt.springbootwsnettyserver.model.Session;
 import com.lyt.springbootwsnettyserver.util.SessionUtil;
 import io.netty.channel.Channel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,9 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConnectFrameHandler implements FrameHandler {
 
-//    public static final ConnectFrameHandler INSTANCE = new ConnectFrameHandler();
-
-//    private ConnectFrameHandler() { }
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public void dealWithFrame(DataContent dataContent, Channel channel) {
@@ -26,7 +28,8 @@ public class ConnectFrameHandler implements FrameHandler {
             System.out.println(" --------------------------------------- ");
             System.out.println(" init user");
             String sendId = dataContent.getChatMsg().get(0).getSenderId();
-            SessionUtil.bindSession(new Session(sendId, ""), channel);
+            User user = userMapper.findByUserId(sendId);
+            SessionUtil.bindSession(new Session(sendId, user.getUserName()), channel);
 
             System.out.println(" init user finish ");
             System.out.println(" --------------------------------------- ");

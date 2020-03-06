@@ -25,10 +25,6 @@ public class ChatFrameHandler implements FrameHandler {
     @Autowired
     private UserRelationMapper userRelationMapper;
 
-//    public static final ChatFrameHandler INSTANCE = new ChatFrameHandler();
-
-//    private ChatFrameHandler() { }
-
     @Override
     public void dealWithFrame(DataContent dataContent, Channel channel) {
         Integer action = dataContent.getAction();
@@ -41,7 +37,6 @@ public class ChatFrameHandler implements FrameHandler {
             System.out.println(" --------------------------------------- ");
 
             String msgId = UUID.randomUUID().toString().replaceAll("-","");
-            Integer notReceptMsgCount = 0;
             // 存储到数据库
             try {
                 chatSingleMapper.insert(msgId,
@@ -52,8 +47,7 @@ public class ChatFrameHandler implements FrameHandler {
                 updateMap.put("lastChatId", msgId);
                 updateMap.put("userId", dataContent.getChatMsg().get(0).getReceiverId());
                 updateMap.put("friUserId", SessionUtil.getSession(channel).getUserId());
-                notReceptMsgCount = userRelationMapper.updateNotReceptCount(updateMap);
-                System.out.println(" userName :" + dataContent.getChatMsg().get(0).getReceiverId() +  " notReceptMsgCount : " + notReceptMsgCount);
+                userRelationMapper.updateNotReceptCount(updateMap);
                 userRelationMapper.updateLastMsgId(msgId,
                         dataContent.getChatMsg().get(0).getReceiverId(),
                         SessionUtil.getSession(channel).getUserId());
@@ -77,7 +71,7 @@ public class ChatFrameHandler implements FrameHandler {
                 DataContent repDataContent = new DataContent();
                 repDataContent.setAction(MsgActionEnum.CHAT_TYPE);
                 repDataContent.setChatMsg(chatMessageList);
-                repDataContent.setExtand(String.valueOf(notReceptMsgCount));
+                repDataContent.setExtand(String.valueOf(userRelationMapper.findNotReceptMsgCountByBothUserId(dataContent.getChatMsg().get(0).getReceiverId(), SessionUtil.getSession(channel).getUserId())));
 
                 // 发送消息到另一个用户
                 friChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.toJson(repDataContent)));

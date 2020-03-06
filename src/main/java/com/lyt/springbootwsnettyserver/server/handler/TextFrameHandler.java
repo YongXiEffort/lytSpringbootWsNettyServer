@@ -29,6 +29,7 @@ public class TextFrameHandler extends SimpleChannelInboundHandler<TextWebSocketF
         handlerMap.put(MsgActionEnum.PULL_CHAT_MSG, SpringUtil.getBean(PullMsgFrameHandler.class));
         handlerMap.put(MsgActionEnum.SIGNED_TYPE, SpringUtil.getBean(SignedFrameHandler.class));
         handlerMap.put(MsgActionEnum.ADD_FRIEND, SpringUtil.getBean(AddFriendFrameHandler.class));
+        handlerMap.put(MsgActionEnum.ADD_FRIEND_REPONSE, SpringUtil.getBean(AddFriendReponseFrameHandler.class));
     }
 
     @Override
@@ -37,7 +38,6 @@ public class TextFrameHandler extends SimpleChannelInboundHandler<TextWebSocketF
         Channel currentChanenl = channelHandlerContext.channel();
         // 1. 获取客户端发送的消息
         String content = textWebSocketFrame.text();
-        System.out.println("  content:  "+content);
         // 2. 获取客户端发来的json数据并解析成DataContent
         DataContent dataContent = TextFrameUtil.parseDataContent(textWebSocketFrame);
         // 3. 获取文本消息类型
@@ -46,6 +46,7 @@ public class TextFrameHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
         // 4. 如果是心跳类型则忽略
         if (action != MsgActionEnum.KEEPALIVE_TYPE) {
+            System.out.println("  content:  "+content);
             handlerMap.get(action).dealWithFrame(dataContent, currentChanenl);
         }
 
