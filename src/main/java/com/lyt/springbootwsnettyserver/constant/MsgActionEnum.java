@@ -10,5 +10,7 @@ public class MsgActionEnum {
     public static final Integer PULL_CHAT_MSG = 6;
     public static final Integer ADD_FRIEND = 7;
     public static final Integer ADD_FRIEND_REPONSE = 8;
+    public static final Integer ADD_FRIEND_REPONSE_AGREE = 9;
+    public static final Integer ADD_FRIEND_REPONSE_REJECT = 10;
 
 }

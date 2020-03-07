@@ -32,10 +32,10 @@ public class AddFriendReponseFrameHandler implements FrameHandler {
         Integer action = dataContent.getAction();
         // 添加好友请求回复处理
         if (action == MsgActionEnum.ADD_FRIEND_REPONSE) {
+            AddFriendRequest addFriendRequest = addFriendRequestMapper.findAddFriendRequestById(dataContent.getChatMsg().get(0).getMsgId());
             if (dataContent.getChatMsg().get(0).getMsg().equals("1")) {
                 Date currentDate = new Date();
                 // 同意添加好友申请
-                AddFriendRequest addFriendRequest = addFriendRequestMapper.findAddFriendRequestById(dataContent.getChatMsg().get(0).getMsgId());
                 // 更改Add_FriendRequest表的接受标志为同意
                 addFriendRequestMapper.updateIfReceptById("1", addFriendRequest.getId());
                 // 更改Add_FriendRequest表的接受标志为同意
@@ -68,7 +68,7 @@ public class AddFriendReponseFrameHandler implements FrameHandler {
                 List<ChatMessage> chatMessageList = new ArrayList<>();
                 chatMessageList.add(repChatMsg);
                 DataContent repDataContent = new DataContent();
-                repDataContent.setAction(MsgActionEnum.ADD_FRIEND_REPONSE);
+                repDataContent.setAction(MsgActionEnum.ADD_FRIEND_REPONSE_AGREE);
                 repDataContent.setChatMsg(chatMessageList);
                 repDataContent.setExtand(addFriendRequest.getId()); // 将添加好友请求表的记录ID存放到 extand，用于给被邀请者将导航栏的好友请求部分变成聊天形式
                 channel.writeAndFlush(new TextWebSocketFrame(JsonUtils.toJson(repDataContent)));
@@ -87,7 +87,15 @@ public class AddFriendReponseFrameHandler implements FrameHandler {
 
             } else if (dataContent.getChatMsg().get(0).getMsg().equals("0")) {
                 // 拒绝添加好友申请
+                // 更改数据库中的Add_FriendRequest表的接受标志为拒绝
                 addFriendRequestMapper.updateIfReceptById("2", dataContent.getChatMsg().get(0).getMsgId());
+                // 更改数据库中的Add_FriendRequest表的接受标志为拒绝
+                // 发送拒绝回文给被邀者，用以页面回显
+                DataContent repDataContent = new DataContent();
+                repDataContent.setAction(MsgActionEnum.ADD_FRIEND_REPONSE_REJECT);
+                repDataContent.setExtand(addFriendRequest.getId()); // 将添加好友请求表的记录ID存放到 extand，用于给被邀请者将导航栏的好友请求部分清除
+                channel.writeAndFlush(new TextWebSocketFrame(JsonUtils.toJson(repDataContent)));
+                // 发送拒绝回文给被邀者，用以页面回显
             }
         }
 
